@@ -1,0 +1,5 @@
+# Exclude Xilinx Primitives from coverage analysis;
+
+coverage exclude -srcfile ../tb/divisor_tb.vhd;
+
+# Add more exclusion. Ensure that each comment or exclusion ends with a semi-colon;

@@ -1,0 +1,2 @@
+../src/dp_rom.vhd
+../src/multiply_by_squaring.vhd
