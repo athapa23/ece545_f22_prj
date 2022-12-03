@@ -1,0 +1,1 @@
+../tb/multiply_by_squaring_tb.vhd
