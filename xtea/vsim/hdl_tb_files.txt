@@ -1,0 +1,3 @@
+../tb/tb_utils_pkg.vhd
+../tb/xtea_datapath_tb.vhd
+../tb/xtea_tb.vhd

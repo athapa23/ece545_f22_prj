@@ -1,0 +1,5 @@
+../src/adder_mod2W.vhd
+../src/xor_W.vhd
+../src/mod_n_counter.vhd
+../src/ram_spar.vhd
+../src/reg_n_width.vhd

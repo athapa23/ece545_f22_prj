@@ -1,0 +1,10 @@
+# Exclude testbench files and package file from the coverage;
+
+coverage exclude -srcfile ../tb/tb_utils_pkg.vhd;
+coverage exclude -srcfile ../tb/xtea_datapath_tb.vhd;
+coverage exclude -srcfile ../tb/xtea_tb.vhd;
+
+# Exclude reset condition for each state;
+coverage exclude -du xtea_controller(rtl) -ftrans present_state S_FIRST_HALF->S_WAITING S_SECOND_HALF->S_WAITING;
+
+# Add more exclusion. Ensure that each comment or exclusion ends with a semi-colon;
