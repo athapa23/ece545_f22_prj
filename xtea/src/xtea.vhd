@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 -- Description:
 --    Performs the follwing operation:
--- 
+--
 --    Split M into two equal parts V0, V1 each of the size of w bits
 --
 --    SUM = 0
@@ -136,28 +136,28 @@ architecture RTL of xtea is
    ----------------------------------------------------------------------------
 
    -- Enable for V0 Register coming from FSM
-   signal fsm_en_v0 : std_logic;
+   signal fsm_en_v0    : std_logic;
 
    -- Enable for V1 Register coming from FSM
-   signal fsm_en_v1 : std_logic;
+   signal fsm_en_v1    : std_logic;
 
    -- Enable for SUM Register coming from FSM
-   signal fsm_en_sum : std_logic;
+   signal fsm_en_sum   : std_logic;
 
    -- Load (clear) for the counter from FSM
-   signal fsm_ld_j : std_logic;
+   signal fsm_ld_j     : std_logic;
 
    -- Enable (add 1) for the counter from FSM
-   signal fsm_en_j : std_logic;
+   signal fsm_en_j     : std_logic;
 
    -- Status flag to FSM indicating max round is reached
-   signal zj : std_logic;
+   signal zj           : std_logic;
 
    -- Contains Cycle 1 or Cycle 2 part of the algorithm
    signal fsm_cyclenum : std_logic;
 
    -- Enable to update the output regiser from FSM
-   signal fsm_enC : std_logic;
+   signal fsm_enC      : std_logic;
 
 -- Start
 begin
