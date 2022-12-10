@@ -1,0 +1,3 @@
+../src/xtea_datapath.vhd
+../src/xtea_controller.vhd
+../src/xtea.vhd
