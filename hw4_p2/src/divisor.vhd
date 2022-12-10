@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 -- Description:
 --    This is a VHDL description of the divisor block,
-
+--
 -------------------------------------------------------------------------------
 -- Revisions:
 -- Date        | Release | Author | Description
@@ -57,11 +57,11 @@ entity divisor is
       -- System Clock
       clk_i : in std_logic;
 
-     -- Intialize the register (indicates a new run when init_i = '1')
-     init_i : in std_logic;
+      -- Intialize the register (indicates a new run when init_i = '1')
+      init_i : in std_logic;
 
-     -- Run computation (enable shift register in the design when '1'
-     run_i  : in std_logic;
+      -- Run computation (enable shift register in the design when '1'
+      run_i  : in std_logic;
 
       -- 8-bit dividend
       z_i   : in  std_logic_vector(7 downto 0);
