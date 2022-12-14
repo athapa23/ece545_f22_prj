@@ -3,8 +3,36 @@ The following repository contains homework or projects from F22 course. See the 
 
 ## Directory Structure
 The repository contains three "modules." Each module will have the following structure:
+
 ```
 |--- <module_name>
+    +-- <cpp>
+    +-- <docs>
+    |   +-- PDF files
+    |   +-- Block Diagrams
+    +-- <src>
+    |   +-- *.vhd
+    +-- <tb>
+    |   +-- *.vhd
+    +-- <vsim>
+    |   +-- *.sh
+    |   +-- *.txt
+    |   +-- *.do
+    +-- <xilinx>
+    |   +-- *.xpr
+    |   +-- *.xdc
+```
 
+## Running Simulation (Modelsim compatible only)
+
+Navigate to `*/vsim/` directory and run the following commands :
 
 ```
+>> ./compile.sh
+>> ./run_batch.sh
+>> ./coverage.sh
+>> ./clean.sh
+```
+
+## Contributions
+Contributions are welcome. Feel free to open a pull request with changes.
