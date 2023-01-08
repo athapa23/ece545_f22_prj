@@ -190,11 +190,17 @@ begin
       procedure reset_procedure is
       begin
 
+         wait until falling_edge(clk_100MHz);
+
          async_reset <= '0';
          wait for 100 ns;
 
+         wait until falling_edge(clk_100MHz);
+
          async_reset <= '1';
          wait for 100 ns;
+
+         wait until falling_edge(clk_100MHz);
 
          async_reset <= '0';
          wait for 100 ns;
@@ -301,26 +307,7 @@ begin
          wait for 1000 ns;
       end procedure xtea_algorithm;
 
-      -- Test all cases
-      procedure test_lsg_case is
-         variable expected_C : std_logic_vector(2 * W - 1 downto 0);
-
-      begin
-
-         ----------------------------------------------------------------------
-         TWRITE("Test LSG Cases", test_running);
-         ----------------------------------------------------------------------
-
-         for m in 0 to 99 loop
-
-            func_xtea      (LSG32, expected_C); -- To TB Model
-            xtea_algorithm (LSG32, expected_C); -- To DUV
-            LSG32 := LSG(LSG32);
-
-         end loop;
-
-      end procedure test_lsg_case;
-
+      -- Test cases verified by the C code
       procedure test_select_case is
 
       begin
@@ -342,6 +329,26 @@ begin
 
       end procedure test_select_case;
 
+      -- Test all cases
+      procedure test_lsg_case is
+         variable expected_C : std_logic_vector(2 * W - 1 downto 0);
+
+      begin
+
+         ----------------------------------------------------------------------
+         TWRITE("Test LSG Cases", test_running);
+         ----------------------------------------------------------------------
+
+         for m in 0 to 99 loop
+
+            func_xtea      (LSG32, expected_C); -- To TB Model
+            xtea_algorithm (LSG32, expected_C); -- To DUV
+            LSG32 := LSG(LSG32);
+
+         end loop;
+
+      end procedure test_lsg_case;
+
    -- Start
    begin
       -- Hit Reset
@@ -354,13 +361,13 @@ begin
 
          run_2_loop : for k in 0 to 1 loop   -- Loop to ensure nothing breaks
 
-            test_lsg_case;
             test_select_case;
+            test_lsg_case;
 
             if k = 0 then
 
                PRINT(" ");
-               PRINT("Looping Over");
+               TWRITE("Looping Over", test_running);
                PRINT(" ");
 
             end if;
