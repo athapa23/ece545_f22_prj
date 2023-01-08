@@ -7,7 +7,7 @@
 //-- Description:
 //--    C implementation of the XTEA algorithm. Below is the psuedocode.
 //--
-//--    Split M into two equal parts V0, V1 each of the size of w bits
+//--    Split message into two equal parts V0, V1 each of the size of 32-bits
 //--
 //--    SUM = 0
 //--
@@ -41,6 +41,8 @@
 //--                                  to the encrypt function as an argument,
 //--                                  with the array itself defined in the
 //--                                  function main().
+//-- 2022-01-07      1.2       AT     Modified encipher function to take 32 bit
+//--                                  message instead of 2 16-bit message.
 //-----------------------------------------------------------------------------
 
 #include <string.h>
@@ -52,13 +54,14 @@
 #define ROUND 3;
 #define DELTA 0x800A;
 
-// Funtion that enchiper's a message using XTEA algorithm
+// Function that enchiper's a message using XTEA algorithm
 void encipher(unsigned int test_num,
-              uint16_t     v0,
-              uint16_t     v1,
+              uint32_t     message,
               uint16_t     key[4]) {
 
   int        max_iter = ROUND; // Specifies the num of rounds
+  uint16_t   v0;               // Contains Most significant 16 bits
+  uint16_t   v1;               // Contains Least significant 16 bits
   uint16_t   w00;              // Intermediate Variables
   uint16_t   w01;              // Intermediate Variables
   uint16_t   t0;               // Intermediate Variables
@@ -67,14 +70,19 @@ void encipher(unsigned int test_num,
   uint16_t   t1;               // Intermediate Variables
   uint16_t   sum     = 0x0000; // Intermediate Variables
 
-  uint16_t   cH;               // cH : MSB 16 bits
-  uint16_t   cL;               // cL : LSB 16 bits
-
-
   printf("-----------------------------\n");
   printf(" TestNum  :  %d\n", test_num);
   printf("-----------------------------\n");
 
+  printf("  \n");
+  printf(" Message  :  %x\n", message);
+  printf("  \n");
+
+  // Split M into two equal parts V0, V1
+  v0 = message >> 16;
+  v1 = message << 0;
+
+  // Loop variable
   unsigned int j;
 
   // Encryption Block
@@ -90,7 +98,7 @@ void encipher(unsigned int test_num,
     v1  += t1;
 
     printf("**********\n");
-    printf(" Run    %d\n", j);
+    printf(" Round  %d\n", j);
     printf("**********\n");
     printf("Output w00 : %x\n", w00);
     printf("Output w01 : %x\n", w01);
@@ -104,11 +112,7 @@ void encipher(unsigned int test_num,
     printf("   \n");
   }
 
-  cH = v0;
-  cL = v1;
-
-  printf("Output cH %x\n", cH);
-  printf("Output cL %x\n", cL);
+  printf("Output Ciphertext : %x\n", v0 << 16 | v1);
   printf("  \n");
 
 }
@@ -116,22 +120,22 @@ void encipher(unsigned int test_num,
 // Main
 int main() {
 
-  // Keys used for encyption
+  // Keys used for encryption
   uint16_t KEY[4] = {0xABCD, 0xCCCC, 0x6666, 0xFEDC};
 
   // Pointer to the KEY array
-  uint16_t *ptr = KEY;
+  uint16_t *ptr   = KEY;
 
-  test0 : encipher(0, 0xFFFF, 0x0000, ptr);
-  test1 : encipher(1, 0x0000, 0xFFFF, ptr);
-  test2 : encipher(2, 0xAAAA, 0x0000, ptr);
-  test3 : encipher(3, 0x5555, 0x0000, ptr);
-  test4 : encipher(4, 0xFFFF, 0xAAAA, ptr);
-  test5 : encipher(5, 0xFFFF, 0x5555, ptr);
-  test6 : encipher(6, 0x0101, 0x1010, ptr);
-  test7 : encipher(7, 0xABCD, 0xEF01, ptr);
-  test8 : encipher(8, 0xABCD, 0xDA1A, ptr);
-  test9 : encipher(9, 0xDA1A, 0x0001, ptr);
+  test0 : encipher(0, 0xFFFF0000, ptr);
+  test1 : encipher(1, 0x0000FFFF, ptr);
+  test2 : encipher(2, 0xAAAA0000, ptr);
+  test3 : encipher(3, 0x55550000, ptr);
+  test4 : encipher(4, 0xFFFFAAAA, ptr);
+  test5 : encipher(5, 0xFFFF5555, ptr);
+  test6 : encipher(6, 0x01011010, ptr);
+  test7 : encipher(7, 0xABCDEF01, ptr);
+  test8 : encipher(8, 0xABCDDA1A, ptr);
+  test9 : encipher(9, 0xDA1A0001, ptr);
 
   return 0;
 
