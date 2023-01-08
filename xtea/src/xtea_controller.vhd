@@ -8,7 +8,6 @@
 -- Description:
 --    Outputs control signal to execute the algorithm.
 --    It takes two cycle to complete the xtea algorithm
---
 -------------------------------------------------------------------------------
 -- Revisions:
 -- Date        | Release | Author | Description

@@ -6,7 +6,7 @@
 -- Standard   : VHDL-2008
 -------------------------------------------------------------------------------
 -- Description:
---    Testbench for the XTEA Datapath block
+--    Testbench for the XTEA top level block
 -------------------------------------------------------------------------------
 -- Revisions:
 -- Date        | Release | Author | Description
@@ -77,8 +77,8 @@ architecture behavior of xtea_tb is
 
    -- Stimuli/Response Checker Specific signals
    signal test_running : string(1 to 60) := (others => ' '); -- @suppress "signal test_running is never read"
-   signal error_count  : natural := 0;
-   signal error_count2 : natural := 0;
+   signal error_count  : natural         := 0;
+   signal error_count2 : natural         := 0;
 
    ----------------------------------------------------------------------------
    -- function XTEA block
@@ -208,30 +208,22 @@ begin
          wait for 100 ns;
 
          -- Check output is '0' after initialization
-         CHECK(done_s = '0',         "Done is not at knownw state",      error_count);
+         CHECK(done_s = '0',         "Done is not at known state",       error_count);
          CHECK(C,      X"0000_0000", "Counter Output not 0 after reset", error_count);
 
       end procedure reset_procedure;
 
-      -- Round Keys
+      -- Load Round Keys for the design
       procedure init_round_keys is
       begin
 
-         Ki <= KEY(0);
-         i  <= B"00";
-         PULSE(write_Ki, clk_100MHz);
+         for i in 0 to 3 loop
 
-         Ki <= KEY(1);
-         i  <= B"01";
-         PULSE(write_Ki, clk_100MHz);
+            Ki <= KEY(i);
+            i  <= std_logic_vector(to_unsigned(i), 2);
+            PULSE(write_Ki, clk_100MHz);
 
-         Ki <= KEY(2);
-         i  <= B"10";
-         PULSE(write_Ki, clk_100MHz);
-
-         Ki <= KEY(3);
-         i  <= B"11";
-         PULSE(write_Ki, clk_100MHz);
+         end loop;
 
       end procedure init_round_keys;
 
@@ -253,6 +245,29 @@ begin
 
       end procedure xtea_algorithm;
 
+      -- Test cases verified by the C code
+      procedure test_select_case is
+
+      begin
+
+         ----------------------------------------------------------------------
+         TWRITE("Test C-generated Cases", test_running);
+         ----------------------------------------------------------------------
+
+                                -- Message     Ciphertext
+         test0 : xtea_algorithm(X"FFFF_0000", X"6A80_1569");
+         test1 : xtea_algorithm(X"0000_FFFF", X"86D0_7EEF");
+         test2 : xtea_algorithm(X"AAAA_0000", X"9B00_5509");
+         test3 : xtea_algorithm(X"5555_0000", X"4253_892A");
+         test4 : xtea_algorithm(X"FFFF_AAAA", X"15DB_816C");
+         test5 : xtea_algorithm(X"FFFF_5555", X"8E55_A31E");
+         test6 : xtea_algorithm(X"0101_1010", X"13AC_48B8");
+         test7 : xtea_algorithm(X"ABCD_EF01", X"FC33_DEE3");
+         test8 : xtea_algorithm(X"ABCD_DA1A", X"D5F2_DB28");
+         test9 : xtea_algorithm(X"DA1A_0001", X"8799_D0DA");
+
+      end procedure test_select_case;
+
       -- Test all cases
       procedure test_lsg_case is
          variable expected_C : std_logic_vector(2 * W - 1 downto 0);
@@ -273,28 +288,6 @@ begin
 
       end procedure test_lsg_case;
 
-      -- Test C Generated Case
-      procedure test_select_case is
-
-      begin
-
-         ----------------------------------------------------------------------
-         TWRITE("Test C-generated Cases", test_running);
-         ----------------------------------------------------------------------
-
-         test0 : xtea_algorithm(X"FFFF_0000", X"6A80_1569");
-         test1 : xtea_algorithm(X"0000_FFFF", X"86D0_7EEF");
-         test2 : xtea_algorithm(X"AAAA_0000", X"9B00_5509");
-         test3 : xtea_algorithm(X"5555_0000", X"4253_892A");
-         test4 : xtea_algorithm(X"FFFF_AAAA", X"15DB_816C");
-         test5 : xtea_algorithm(X"FFFF_5555", X"8E55_A31E");
-         test6 : xtea_algorithm(X"0101_1010", X"13AC_48B8");
-         test7 : xtea_algorithm(X"ABCD_EF01", X"FC33_DEE3");
-         test8 : xtea_algorithm(X"ABCD_DA1A", X"D5F2_DB28");
-         test9 : xtea_algorithm(X"DA1A_0001", X"8799_D0DA");
-
-      end procedure test_select_case;
-
    -- Start
    begin
       -- Hit Reset
@@ -307,13 +300,13 @@ begin
 
          run_2_loop : for k in 0 to 1 loop   -- Loop to ensure nothing breaks
 
-            test_lsg_case;
             test_select_case;
+            test_lsg_case;
 
             if k = 0 then
 
                PRINT(" ");
-               PRINT("Looping Over");
+               TWRITE("Looping Over", test_running);
                PRINT(" ");
 
             end if;

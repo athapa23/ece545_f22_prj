@@ -7,7 +7,7 @@
 -------------------------------------------------------------------------------
 -- Description:
 --    Execution unit of the XTEA block. Below is the algorithm
--- 
+--
 --    Split M into two equal parts V0, V1 each of the size of w bits
 --
 --    SUM = 0
@@ -142,13 +142,13 @@ entity xtea_datapath is
 
       -- Active High Enable for Counter Register
       en_j     : in  std_logic;
- 
+
       -- Active High Counter Max Indicator
       zj       : out std_logic;
 
       -- Cycle 1 or 2 Stage indicator
       cyclenum : in  std_logic;
- 
+
       -- Output Enable
       enC      : in  std_logic;
 
@@ -305,7 +305,7 @@ begin
       )
       port map(
          x => sum_r_reg,
-         y => std_logic_vector(unsigned(to_unsigned(DELTA, W))),
+         y => std_logic_vector(to_unsigned(DELTA, W)),
          s => sum_r_next
       );
 

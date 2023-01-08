@@ -71,7 +71,7 @@ package body tb_utils_pkg is
    ----------------------------------------------------------------------------
    -- Write Test Procedure
    ----------------------------------------------------------------------------
-   procedure twrite(msg                 : in  string; 
+   procedure twrite(msg                 : in  string;
                     signal test_running : out string;
                     resolution          : in  time := 1 us
    ) is
@@ -92,8 +92,6 @@ package body tb_utils_pkg is
          write(test_line, string'(" pS: "));
       elsif resolution = 1 ms then
          write(test_line, string'(" mS: "));
-      else
-         write(test_line, string'(" ticks: "));
       end if;
       write(test_line, msg);
       writeline(OUTPUT, test_line);
@@ -162,7 +160,7 @@ package body tb_utils_pkg is
    end procedure;
 
    ----------------------------------------------------------------------------
-   -- Print Results 
+   -- Print Results
    ----------------------------------------------------------------------------
    procedure results(signal error_count : in integer) is
       variable tline : line;
