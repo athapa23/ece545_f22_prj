@@ -217,14 +217,22 @@ begin
       procedure init_round_keys is
       begin
 
-         for i in 0 to 3 loop
+         Ki <= KEY(0);
+         i  <= B"00";
+         PULSE(write_Ki, clk_100MHz);
 
-            Ki <= KEY(i);
-            i  <= std_logic_vector(to_unsigned(i), 2);
-            PULSE(write_Ki, clk_100MHz);
+         Ki <= KEY(1);
+         i  <= B"01";
+         PULSE(write_Ki, clk_100MHz);
 
-         end loop;
+         Ki <= KEY(2);
+         i  <= B"10";
+         PULSE(write_Ki, clk_100MHz);
 
+         Ki <= KEY(3);
+         i  <= B"11";
+         PULSE(write_Ki, clk_100MHz);
+  
       end procedure init_round_keys;
 
       -- Send a message, wait until it is complete and check the output
